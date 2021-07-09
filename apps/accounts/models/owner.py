@@ -2,30 +2,32 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
 from .user import User
+"""
 
-
-class AdminManager(BaseUserManager):
+class OwnerManager(BaseUserManager):
     def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(type=User.Types.ADMIN)
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.OWNER)
 
 
-class Admin(User):
+class Owner(User):
     base_type = User.Types.OWNER
-    objects = AdminManager()
+    objects = OwnerManager()
 
     class Meta:
         proxy = True
 
     @property
     def more(self):
-        return self.admininfo
+        return self.ownerinfo
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.type = User.Types.ADMIN
+            self.type = User.Types.OWNER
         return super().save(*args, **kwargs)
 
 
-class AdminInfo(models.Model):
+class OwnerInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=10, choices=(('CTO', 'CTO'), ('CEO', 'CEO'), ('COO', 'COO'), ('Other', 'Other')))
+    nif = models.CharField(max_length=8)
+    
+    """
