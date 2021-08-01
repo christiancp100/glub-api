@@ -12,3 +12,6 @@ six @ file:///Users/christiancapeans/Library/Caches/pypoetry/artifacts/48/e6/04/
 sqlparse @ file:///Users/christiancapeans/Library/Caches/pypoetry/artifacts/f6/9e/b8/b33d7ab31a08d0f94b260c990d807e12f38e0ffb105a4c2ca9ad9a6434/sqlparse-0.4.1-py3-none-any.whl
 text-unidecode @ file:///Users/christiancapeans/Library/Caches/pypoetry/artifacts/9b/cc/f2/c615087594418f3b86c03fb83c56a1d3b673e89924d4bd0cece68a7615/text_unidecode-1.3-py2.py3-none-any.whl
 django-filter==2.4.0
+
+Django~=3.2.5
+djangorestframework~=3.12.4
