@@ -1,7 +1,15 @@
 aniso8601==8.1.1
 asgiref @ file:///Users/christiancapeans/Library/Caches/pypoetry/artifacts/3f/98/4d/6a033cf821463ecb706293158c40bcde94048c2f69eee1ba0354d1b42f/asgiref-3.4.1-py3-none-any.whl
 Django @ file:///Users/christiancapeans/Library/Caches/pypoetry/artifacts/0f/a1/a6/f5bd007bad993aeadcaf54c6a387a3d5dee48b869da3f1b1ff3614b401/Django-3.2.5-py3-none-any.whl
+django-filter==2.4.0
 django-graphql-jwt==0.3.2
+djangorestframework==3.12.4
+djangorestframework-simplejwt==4.7.2
+graphene==3.0b7
+graphene-django==3.0.0b7
+graphql-core==3.1.5
+graphql-relay==3.1.0
+Pillow==8.3.1
 promise==2.3
 psycopg2==2.9.1
 PyJWT==2.1.0
@@ -11,7 +19,3 @@ singledispatch @ file:///Users/christiancapeans/Library/Caches/pypoetry/artifact
 six @ file:///Users/christiancapeans/Library/Caches/pypoetry/artifacts/48/e6/04/8118155ae3ec3a16dd2a213bbf7a7d8a62c596b2e90f73a22c896269f1/six-1.16.0-py2.py3-none-any.whl
 sqlparse @ file:///Users/christiancapeans/Library/Caches/pypoetry/artifacts/f6/9e/b8/b33d7ab31a08d0f94b260c990d807e12f38e0ffb105a4c2ca9ad9a6434/sqlparse-0.4.1-py3-none-any.whl
 text-unidecode @ file:///Users/christiancapeans/Library/Caches/pypoetry/artifacts/9b/cc/f2/c615087594418f3b86c03fb83c56a1d3b673e89924d4bd0cece68a7615/text_unidecode-1.3-py2.py3-none-any.whl
-django-filter==2.4.0
-
-Django~=3.2.5
-djangorestframework~=3.12.4
