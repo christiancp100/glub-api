@@ -1,7 +1,7 @@
-from django.urls import path, include
-from .views import create_partial_user
+from django.urls import path
+from .views import CreatePartialUserView
 
 
 urlpatterns = [
-    path('registry/create-user/', create_partial_user, name='create-partial-user'),
+    path('registry/create-user/', CreatePartialUserView.as_view())
 ]
