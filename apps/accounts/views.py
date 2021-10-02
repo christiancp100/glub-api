@@ -3,7 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
-from rest_framework.exceptions import NotAuthenticated, PermissionDenied
+from rest_framework.exceptions import PermissionDenied
 from .permissions import UpdateOwn, IsAdmin
 from .serializers import UserSerializer
 from .models import User, UserProfile
@@ -14,6 +14,9 @@ class UserSerializerViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     authentication_classes = (JWTAuthentication, BasicAuthentication, SessionAuthentication)
     permission_classes = [UpdateOwn | IsAdmin]
+
+    def get_serializer_class(self):
+        return UserSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -36,4 +39,10 @@ class UserSerializerViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         raise PermissionDenied()
 
-
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        profile_data = request.data.pop("profile")
+        UserProfile.objects \
+            .filter(user_id=self.get_object().id) \
+            .update(**profile_data)
+        return super().update(request, *args, **kwargs)
