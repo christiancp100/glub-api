@@ -32,6 +32,11 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def create_partial_user(self, **validated_data):
+        user = self.create(**validated_data)
+        user.is_completed = False
+        user.save()
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
