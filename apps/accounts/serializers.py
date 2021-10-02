@@ -12,13 +12,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         optional_fields = '__all__'
         exclude = ('user',)
 
-    def validate_identity_number(self, value):
-        if len(value) < 9:
+    def validate_identity_number(self, identity_number):
+        if len(identity_number) < 9:
             raise serializers.ValidationError("El DNI está mal escrito.")
-
-    def get_identity_number(self, identity_number):
-        print("hola: ", identity_number)
-        return identity_number.upper()
+        return identity_number
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
