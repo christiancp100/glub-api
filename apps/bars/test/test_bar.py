@@ -37,11 +37,10 @@ class PublicBarTests(TestCase):
     def test_retrieve_bars(self):
         Bar.objects.create(name="TestBar1", owner=sample_owner("test@company.com"))
         Bar.objects.create(name="TestBar2", owner=sample_owner("competence@company.com"))
-
-        res = self.client.get(BARS_URL)
-
         bars = Bar.objects.all().order_by('-name')
         serializer = BarSerializer(bars, many=True)
+
+        res = self.client.get(BARS_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
@@ -63,6 +62,7 @@ class PrivateBarTests(TestCase):
         res = self.client.post(BARS_URL, BAR_DATA)
 
         bar = Bar.objects.get(name=BAR_DATA.get('name'))
+        self.assertTrue(Bar.objects.filter(name=BAR_DATA.get('name')).exists())
         self.assertEqual(res.data.get('name'), bar.name)
 
     def test_client_cannot_create_bar(self):
@@ -84,7 +84,7 @@ class PrivateBarTests(TestCase):
             'capacity': 300
         }
         self.user.is_superuser = True
-        owner = sample_owner("anoter@owner.com", "test_pass")
+        owner = sample_owner("another@owner.com", "test_pass")
         BAR_DATA.update({'owner': owner.id})
 
         res = self.client.post(BARS_URL, BAR_DATA)

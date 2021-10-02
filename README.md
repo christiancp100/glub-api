@@ -3,7 +3,7 @@
 1. Create a virtual env (call it venv)
 2. Activate virtual env: <code>source venv/bin/activate</code>
 3. Install dependencies: <code>pip install -r requirements.txt</code> 
-4. Run the Database container: <code>docker compose up</code>
+4. Run the Database container in another terminal instance: <code>docker compose up</code>
 5. <code>python manage.py migrate</code>
 5. <code>python manage.py runserver</code>
 

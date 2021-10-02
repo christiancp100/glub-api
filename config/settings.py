@@ -46,7 +46,9 @@ INSTALLED_APPS = [
 
     # Apps
     'apps.accounts',
-    'apps.bars'
+    'apps.bars',
+    'apps.events',
+    'apps.registry'
 ]
 
 REST_FRAMEWORK = {

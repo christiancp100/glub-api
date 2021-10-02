@@ -4,4 +4,4 @@ from .models import Bar
 
 @admin.register(Bar)
 class BarAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'owner', 'id',)

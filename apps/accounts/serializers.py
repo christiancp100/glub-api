@@ -14,11 +14,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    profile = UserProfileSerializer(required=False)
+    profile = UserProfileSerializer(required=True)
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'name', 'password', 'profile']
+        fields = ['id', 'email', 'first_name', 'last_name', 'password', 'profile']
         extra_kwargs = {
             'password': {
                 'write_only': True,
@@ -29,15 +29,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         }
 
     def create(self, validated_data):
-        profile_data = validated_data.pop('profile')
-        user = User.objects.create_user(
-            email=validated_data['email'],
-            name=validated_data['name'],
-            password=validated_data['password'])
-        UserProfile.objects.create(user=user, **profile_data)
+        user = User.objects.create_user(**validated_data)
         return user
 
     def update(self, instance, validated_data):
+        print("Viene a este método", instance.id)
+
         profile_data = validated_data.pop('profile')
         UserProfile.objects.update(user_id=instance.id, **profile_data)
         if 'password' in validated_data:

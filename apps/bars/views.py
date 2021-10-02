@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from .models import Bar
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.exceptions import NotFound
 from rest_framework import viewsets, status
 from apps.bars.serializers import BarSerializer
 from ..accounts.models import User

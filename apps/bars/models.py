@@ -4,12 +4,14 @@ from apps.accounts.models import User
 
 class BarManager(models.Manager):
 
-    def create(self, name, address, capacity):
+    def get_bars_by_owner(self, owner):
+        return self.filter(owner=owner)
 
-        return super().create()
-
-    def update(self):
-        return super().update()
+    def is_owned_by_owner(self, bar_id, owner_id):
+        bar = self.get(id=bar_id)
+        if bar:
+            return bar.owner.id == owner_id
+        return False
 
 
 class Bar(models.Model):
@@ -23,10 +25,7 @@ class Bar(models.Model):
     capacity = models.IntegerField(default=100, blank=False, null=False)
     is_active = models.BooleanField(default=True)
 
-    # objects = BarManager()
-
+    objects = BarManager()
 
     def __str__(self):
         return self.name
-
-
