@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import CreatePartialUserView
-
+from .views import CreatePartialUserView, RegistryView
 
 urlpatterns = [
-    path('registry/create-user/', CreatePartialUserView.as_view())
+    path('', RegistryView.as_view(), name="registry-view"),
+    path('create-user/', CreatePartialUserView.as_view())
 ]

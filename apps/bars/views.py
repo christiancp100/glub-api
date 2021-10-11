@@ -4,10 +4,10 @@ from rest_framework.response import Response
 from .models import Bar
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from apps.bars.serializers import BarSerializer
 from ..accounts.models import User
-from ..accounts.permissions import IsOwnerOrReadOnly
+from ..accounts.permissions import IsOwnerOrReadOnly, IsOwner
 
 
 class BarViewSet(viewsets.ModelViewSet):
@@ -28,3 +28,11 @@ class BarViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         bar = Bar.objects.create(owner=owner, **serializer.data)
         return Response(BarSerializer(bar).data, status=status.HTTP_201_CREATED)
+
+
+class BarOwnerView(generics.ListAPIView):
+    serializer_class = BarSerializer
+    permission_classes = [IsOwner]
+
+    def get_queryset(self):
+        return Bar.objects.filter(owner_id=self.request.user.id)
