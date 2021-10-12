@@ -1,0 +1,1 @@
+sudo celery multi restart 1 --pidfile=/var/run/celery/%n.pid

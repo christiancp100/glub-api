@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'qr_code',
 
     # Apps
     'apps.accounts',
@@ -131,6 +132,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
@@ -183,6 +185,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT= os.path.join(BASE_DIR, "static/")
+STATICFILES_DIRS = (os.path.join(BASE_DIR,  "apps/registry/static"),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -191,7 +195,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # USER
 AUTH_USER_MODEL = 'accounts.User'
-
 # Email
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -201,3 +204,14 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'glub.info@gmail.com'
 EMAIL_HOST_PASSWORD = 'GG1ub_AlChrisJa_2020E' #'atqeldzrnhkliayj'
 EMAIL_USE_SSL=False
+
+
+# Celery
+
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+

@@ -10,8 +10,8 @@ from .serializers import RegistrySerializer
 from apps.accounts.serializers import PartialUserSerializer
 from apps.accounts.models import User
 from apps.bars.models import Bar
-from django.core.mail import send_mail
-from django.conf import settings
+from utils.celery.tasks import send_mail_task
+
 
 def get_profile(data):
     try:
@@ -26,8 +26,7 @@ def get_profile(data):
     return data
 
 
-
-class CreatePartialUserView(UpdateModelMixin, CreateModelMixin, GenericAPIView):
+class CreatePartialUserView(CreateModelMixin, GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = PartialUserSerializer
 
@@ -39,27 +38,30 @@ class CreatePartialUserView(UpdateModelMixin, CreateModelMixin, GenericAPIView):
             return user
         return ValidationError("Los datos no están bien escritos.")
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, user, *args, **kwargs):
         user_data = get_profile(request.data)
         serializer = self.serializer_class(data=user_data, partial=True)
         serializer.is_valid(raise_exception=True)
-        user_id = serializer.update(User.objects.get(email=request.data.get("email", None)), serializer.data)
-        return Response({"id": user_id})
+        serializer.update(user, serializer.data)
+        return user
 
     def post(self, request, *args, **kwargs):
         user = User.objects.filter(email=request.data.get("email", None)).first()
         if user is not None:
-            user = self.update(request, *args, **kwargs)
+            user = self.update(request, user, *args, **kwargs)
         else:
             user = self.create(request, *args, **kwargs)
-        send_mail(
-            subject="Hola",
-            message="Hola holita vecinito",
-            from_email="info@glubapp.com",
-            recipient_list=["christiancp100@gmail.com"],
-            fail_silently=False
+
+        send_mail_task.delay(
+            "Tu código QR ya está aquí",
+            "registry/qr_code_email.html",
+            "info@glubapp.com",
+            [user.email],
+            context={
+                "user_id": user.id
+            }
         )
-        return user
+        return Response(status=status.HTTP_200_OK)
 
 
 class RegistryView(ListCreateAPIView):

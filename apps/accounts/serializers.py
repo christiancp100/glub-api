@@ -27,7 +27,7 @@ class PartialUserSerializer(BaseUserSerializer):
 
     def save_partial(self, validated_data):
         user = User.objects.create_partial_user(**validated_data)
-        return user.id
+        return user
 
     def update(self, instance, validated_data):
         profile = validated_data.pop("profile", None)

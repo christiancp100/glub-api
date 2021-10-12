@@ -4,7 +4,7 @@ from rest_framework.test import APIClient
 from apps.accounts.models import User
 from .models import Registry
 
-REGISTRY_URL = "/api/registry/"
+REGISTRY_URL = "/api/registry/create-user/"
 
 
 class RegistryTests(TestCase):
@@ -16,22 +16,19 @@ class RegistryTests(TestCase):
             'firstName': "First",
             'lastName': "Last Last",
             'email': "test@client.com",
-            'profile': {
-                'phone': 650234512,
-                'identity_number': "11111122A"
-            }
+            'phone': "650234512",
+            'identityNumber': "11111122A"
         }
-        res = self.client.post(REGISTRY_URL, USER_DATA, format="json")
+        res = self.client.post(REGISTRY_URL, USER_DATA)
         user = User.objects.get(email=USER_DATA.get('email'))
         self.assertEqual(user.first_name, USER_DATA.get('firstName'))
         self.assertEqual(user.last_name, USER_DATA.get('lastName'))
-        self.assertEqual(user.id_number, USER_DATA.get('profile').get('identity_number'))
-        self.assertEqual(user.id_number, USER_DATA.get('profile').get('phone'))
+        self.assertEqual(user.id_number, USER_DATA.get('identity_number'))
+        self.assertEqual(user.id_number, USER_DATA.get('phone'))
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
     def test_create_duplicated_registry_reuses_information(self):
-
         pass
 
     def test_retrieve_user_id_given_qr(self):
