@@ -6,6 +6,21 @@ from apps.accounts.serializers import UserSerializer
 
 BASE_URL = "/api/users/"
 
+REGULARUSER_DATA = {
+    "email": "user22@gmail.com",
+    "first_name": "First",
+    "last_name": "Lasts",
+    "password": "superuser",
+    "profile": {
+        "phone": "671870011",
+        "address": "Pelicano",
+        "country": "Spain",
+        "city": "Coruña",
+        "zip": "15009",
+        "identity_number": "33333333V"
+    }
+}
+
 
 class ClientTest(TestCase):
     def setUp(self):
@@ -50,7 +65,7 @@ class ClientTest(TestCase):
 
     def test_no_superuser_can_be_created_through_api_users(self):
         CLIENT_DATA = {
-            "email": "superuser@gmail.com",
+            "email": "user@gmail.com",
             "first_name": "Firstsuperuser",
             "last_name": "Lastsuperuser",
             "is_superuser": "true",
@@ -72,7 +87,7 @@ class ClientTest(TestCase):
         self.assertEqual(created_user.is_superuser, False)
         self.assertEqual(created_user.is_owner, False)
 
-    def test_user1_cant_access_information_from_user2(self):
+    def test_authenticated_user_cant_access_information_from_regular_user(self):
         CLIENT_DATA1 = {
             "email": "user11@gmail.com",
             "first_name": "First",
@@ -88,24 +103,9 @@ class ClientTest(TestCase):
             }
         }
 
-        CLIENT_DATA2 = {
-            "email": "user22@gmail.com",
-            "first_name": "First",
-            "last_name": "Lasts",
-            "password": "superuser",
-            "profile": {
-                "phone": "671870011",
-                "address": "Pelicano",
-                "country": "Spain",
-                "city": "Coruña",
-                "zip": "15009",
-                "identity_number": "33333333V"
-            }
-        }
-
         authenticated_user = User.objects.create_user(**CLIENT_DATA1)
         self.client.force_authenticate(authenticated_user)
-        regular_user = User.objects.create_user(**CLIENT_DATA2)
+        regular_user = User.objects.create_user(**REGULARUSER_DATA)
         res = self.client.get(BASE_URL + str(regular_user.id) + "/", format="json")
         self.assertEqual(status.HTTP_403_FORBIDDEN, res.status_code)
 
@@ -115,29 +115,6 @@ class ClientTest(TestCase):
             "first_name": "First",
             "last_name": "Lasts",
             "password": "superuser",
-             # "profile": {
-             #     "phone": "671870011",
-             #     "address": "hola 20",
-             #     "country": "Spain",
-             #     "city": "Coruña",
-             #     "zip": "15009",
-             #     "identity_number": "33333333V"
-             # }
-        }
-
-        REGULARUSER_DATA = {
-            "email": "user22@gmail.com",
-            "first_name": "First",
-            "last_name": "Lasts",
-            "password": "superuser",
-            "profile": {
-                "phone": "671870011",
-                "address": "Pelicano",
-                "country": "Spain",
-                "city": "Coruña",
-                "zip": "15009",
-                "identity_number": "33333333V"
-            }
         }
 
         superuser = User.objects.create_superuser(**SUPERUSER_DATA)
