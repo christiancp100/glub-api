@@ -25,3 +25,21 @@ In the apps directory
 <code>python manage.py shell</code>
 
 Then you can execute any python code and import the functions and classes implemented in the project scope
+
+# Work with Git
+
+<code>git checkout master</code>
+
+<code>git pull</code>
+
+<code>git checkout features/GLUB-XX</code>
+
+When you´re done working:
+
+<code>git status</code>
+
+<code>git add .</code>
+
+<code>git commit -m "Type her your message""</code>
+
+<code>git push</code>
