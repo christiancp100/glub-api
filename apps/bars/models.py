@@ -23,9 +23,20 @@ class Bar(models.Model):
     name = models.CharField(max_length=60, default="Anonymous Bar", blank=False, null=False)
     address = models.CharField(max_length=100, blank=False, null=False)
     capacity = models.IntegerField(default=100, blank=False, null=False)
+    current_capacity = models.IntegerField(default=0, blank=False, null=False)
     is_active = models.BooleanField(default=True)
 
     objects = BarManager()
+
+    def increase_capacity(self):
+        if self.current_capacity <= self.capacity:
+            self.current_capacity += 1
+            self.save()
+
+    def decrease_capacity(self):
+        if self.current_capacity > 0:
+            self.current_capacity -= 1
+            self.save()
 
     def __str__(self):
         return self.name

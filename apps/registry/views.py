@@ -1,12 +1,14 @@
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListCreateAPIView
-from rest_framework.mixins import CreateModelMixin, UpdateModelMixin
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.serializers import ValidationError
+from rest_framework.viewsets import ViewSet
+
 from apps.accounts.permissions import IsOwner
 from .models import Registry
-from .serializers import RegistrySerializer
+from .serializers import RegistrySerializer, CapacitySerializer
 from apps.accounts.serializers import PartialUserSerializer
 from apps.accounts.models import User
 from apps.bars.models import Bar
@@ -89,5 +91,37 @@ class RegistryView(ListCreateAPIView):
         serializer = RegistrySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=user, bar=bar)
+            bar.increase_capacity()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CapacityView(ViewSet):
+    permission_classes = [IsOwner]
+    serializer_class = CapacitySerializer
+
+    @staticmethod
+    def decrease_capacity(request, *args, **kwargs):
+        serializer = CapacitySerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            bar = Bar.objects.filter(id=serializer.data["bar_id"]).first()
+            if bar:
+                bar.decrease_capacity()
+                return Response({
+                    'capacity': bar.capacity,
+                    'current_capacity': bar.current_capacity
+                })
+            raise ValidationError("Debes especificar el bar_id")
+
+    @staticmethod
+    def increase_capacity(request, *args, **kwargs):
+        serializer = CapacitySerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            bar = Bar.objects.filter(id=request.data.pop("bar_id", None)).first()
+            if bar:
+                bar.increase_capacity()
+                return Response({
+                    'capacity': bar.capacity,
+                    'current_capacity': bar.current_capacity
+                })
+        raise ValidationError("Debes especificar el bar_id")
