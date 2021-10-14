@@ -36,6 +36,7 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(validated_data.pop("email", None))
         profile_data = validated_data.pop('profile')
         user = self.model(email=email, **validated_data)
+        user.is_completed = True
         user.save(using=self._db)
         UserProfile.objects.create(user=user, **profile_data)
         return user

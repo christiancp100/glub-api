@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Registry
 
-# Register your models here.
+
+@admin.register(Registry)
+class BarAdmin(admin.ModelAdmin):
+    list_display = ('date_registered', 'user', 'bar',)
