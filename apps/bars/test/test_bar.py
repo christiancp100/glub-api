@@ -132,17 +132,16 @@ class PrivateBarTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_admin_can_update_bar(self):
-
-        admin = sample_admin("admin@admin.com", "test_pass")
+        bar = Bar.objects.create(owner=self.user, **BAR_DATA)
+        admin = sample_admin()
         self.client.force_authenticate(admin)
-        bar = Bar.objects.create(owner=admin, **BAR_DATA)
         BAR_DATA.update({'name': 'Aristo Bar'})
         url = BARS_URL + str(bar.id) + "/"
         res = self.client.put(url, BAR_DATA)
         updated_bar = Bar.objects.get(id=bar.id)
+
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(updated_bar.name, BAR_DATA.get('name'))
-
 
     def test_owner_can_list_their_bars(self):
 
