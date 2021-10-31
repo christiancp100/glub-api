@@ -14,6 +14,11 @@ from pathlib import Path
 from datetime import timedelta
 import os
 import sys
+import environ
+
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-oz++_#u)2t!q6%35kjw2a)vm4q*g5q!-!77nz-*1h54q0%3=ox'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["django-env.eba-sueq8a6m.us-west-2.elasticbeanstalk.com"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -142,11 +147,11 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': "glub",
-        'USER': 'glub',
-        'PASSWORD': 'glub-password',
-        'HOST': 'localhost',
-        'PORT': '5433',
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"),
     }
 }
 
@@ -198,11 +203,11 @@ AUTH_USER_MODEL = 'accounts.User'
 # Email
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'glub.info@gmail.com'
-EMAIL_HOST_PASSWORD = 'GG1ub_AlChrisJa_2020E' #'atqeldzrnhkliayj'
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_USE_SSL=False
 
 

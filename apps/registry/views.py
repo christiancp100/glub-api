@@ -24,7 +24,7 @@ def get_profile(data):
             "identity_number": identity_number
         }
     except:
-        raise ValidationError({"message": "El número de teléfono o el DNI no están presentes."})
+        raise ValidationError("El número de teléfono o el DNI no están presentes.")
     return data
 
 
