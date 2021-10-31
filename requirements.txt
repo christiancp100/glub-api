@@ -9,6 +9,7 @@ click-plugins==1.1.1
 click-repl==0.2.0
 Django==3.2.6
 django-cors-headers==3.10.0
+django-environ==0.8.1
 django-filter==2.4.0
 django-qr-code==2.2.0
 djangorestframework==3.12.4
