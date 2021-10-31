@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'qr_code',
-    'environ',
-
     # Apps
     'apps.accounts',
     'apps.bars',
