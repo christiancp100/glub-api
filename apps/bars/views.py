@@ -9,12 +9,15 @@ from apps.bars.serializers import BarSerializer
 from ..accounts.models import User
 from ..accounts.permissions import IsOwnerOrReadOnly, IsOwner
 
+from rest_framework.parsers import MultiPartParser, FormParser
+
 
 class BarViewSet(viewsets.ModelViewSet):
     authentication_classes = (BasicAuthentication, SessionAuthentication, JWTAuthentication)
     queryset = Bar.objects.all()
     serializer_class = BarSerializer
     permission_classes = (IsOwnerOrReadOnly,)
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         return self.queryset.all().order_by('-name')
