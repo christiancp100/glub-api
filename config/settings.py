@@ -14,6 +14,11 @@ from pathlib import Path
 from datetime import timedelta
 import os
 import sys
+import environ
+
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +32,7 @@ SECRET_KEY = "django-insecure-oz++_#u)2t!q6%35kjw2a)vm4q*g5q!-!77nz-*1h54q0%3=ox
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["glub-api-dev.eu-west-3.elasticbeanstalk.com"]
+ALLOWED_HOSTS = ["glub-api-dev.eu-west-3.elasticbeanstalk.com", "127.0.0.1"]
 
 # Application definition
 INSTALLED_APPS = [
