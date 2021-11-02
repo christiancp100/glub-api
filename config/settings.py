@@ -32,8 +32,8 @@ SECRET_KEY = "django-insecure-oz++_#u)2t!q6%35kjw2a)vm4q*g5q!-!77nz-*1h54q0%3=ox
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["glub-api-dev.eu-west-3.elasticbeanstalk.com", "127.0.0.1"]
-
+# ALLOWED_HOSTS = ["glub-api-dev.eu-west-3.elasticbeanstalk.com", "127.0.0.1"]
+ALLOWED_HOSTS = []
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
