@@ -1,0 +1,18 @@
+branch-defaults:
+  feature/GLUB-49:
+    environment: glub-api-dev
+    group_suffix: null
+global:
+  application_name: glub-api
+  branch: null
+  default_ec2_keyname: glub-api
+  default_platform: Python 3.8 running on 64bit Amazon Linux 2
+  default_region: eu-west-3
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  repository: null
+  sc: git
+  workspace_type: Application

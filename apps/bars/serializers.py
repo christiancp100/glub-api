@@ -5,11 +5,10 @@ from .models import Bar
 
 
 class BarSerializer(serializers.ModelSerializer):
-    owner_id = serializers.CharField(source="owner.id")
 
     class Meta:
         model = Bar
-        fields = ("owner_id", "name", "address", "capacity", "image_file")
+        fields = ("name", "address", "capacity", "logo")
         read_only_fields = ("id",)
 
 

@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-
+from rest_framework.exceptions import NotAcceptable
 from .models import Bar
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -8,8 +8,8 @@ from rest_framework import viewsets, status, generics
 from apps.bars.serializers import BarSerializer
 from ..accounts.models import User
 from ..accounts.permissions import IsOwnerOrReadOnly, IsOwner
-
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.db import IntegrityError
 
 
 class BarViewSet(viewsets.ModelViewSet):
@@ -24,12 +24,17 @@ class BarViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         if self.request.user.is_superuser:
-            owner = get_object_or_404(User, id=request.data.get('owner'))
+            owner = get_object_or_404(User, id=request.data.get('ownerId'))
         else:
             owner = self.request.user
-        serializer.is_valid(raise_exception=True)
-        bar = Bar.objects.create(owner=owner, **serializer.data)
+
+        try:
+            bar = Bar.objects.create(owner=owner, **serializer.validated_data)
+        except IntegrityError:
+            raise NotAcceptable("Ya tienes un bar con ese nombre")
         return Response(BarSerializer(bar).data, status=status.HTTP_201_CREATED)
 
 

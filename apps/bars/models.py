@@ -1,6 +1,5 @@
 from django.db import models
 from apps.accounts.models import User
-from config import settings
 
 
 class BarManager(models.Manager):
@@ -16,31 +15,22 @@ class BarManager(models.Manager):
 
 
 def upload_to(instance, filename):
-    return 'baricons/{filename}'.format(filename=filename)
-
-
-def default_image():
-    return settings.MEDIA_ROOT + 'baricons/default_image.png'
+    return 'bars/{bar_name}/logo/{filename}'.format(bar_name=instance.name, filename=filename)
 
 
 class Bar(models.Model):
     class Meta:
         unique_together = ('name', 'owner')
 
-    # TODO Add logo and images
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=60, default="Anonymous Bar", blank=False, null=False)
     address = models.CharField(max_length=100, blank=False, null=False)
     capacity = models.IntegerField(default=100, blank=False, null=False)
+    current_capacity = models.IntegerField(default=0, blank=False, null=False)
     is_active = models.BooleanField(default=True)
-    image_file = models.ImageField(upload_to=upload_to, default=default_image())
+    logo = models.ImageField(upload_to=upload_to, blank=True, null=True)
 
     objects = BarManager()
 
     def __str__(self):
         return self.name
-
-
-class BarIcon(models.Model):
-    image_name = models.CharField(max_length=32)
-    image_file = models.ImageField(upload_to=upload_to)

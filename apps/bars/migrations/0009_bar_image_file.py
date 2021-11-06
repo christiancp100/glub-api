@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bar',
             name='image_file',
-            field=models.ImageField(default=apps.bars.models.default_image, upload_to=apps.bars.models.upload_to),
+            field=models.ImageField(upload_to=apps.bars.models.upload_to),
         ),
     ]
