@@ -6,8 +6,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework import viewsets, status, generics
 from apps.bars.serializers import BarSerializer
-from ..accounts.models import User
-from ..accounts.permissions import IsOwnerOrReadOnly, IsOwner
+from apps.accounts.permissions import IsOwnerOrReadOnly, IsOwner
+from apps.accounts.models import User
 
 
 class BarViewSet(viewsets.ModelViewSet):
@@ -22,7 +22,7 @@ class BarViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if self.request.user.is_superuser:
-            owner = get_object_or_404(User, id=request.data.get('owner'))
+            owner = get_object_or_404(User, id=request.data.get('owner_id'))
         else:
             owner = self.request.user
         serializer.is_valid(raise_exception=True)
