@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.bars',
     'apps.events',
-    'apps.registry'
+    'apps.registry',
+    'apps.tickets'
 ]
 
 REST_FRAMEWORK = {

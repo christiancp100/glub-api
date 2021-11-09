@@ -1,11 +1,10 @@
 from rest_framework import viewsets, status
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from apps.events.models import Event
-from apps.bars.models import Bar
-from apps.events.serializers import EventSerializer
+from .models import Event
+from .serializers import EventSerializer
 from .permissions import IsOwnerOrReadOnly
+from apps.bars.models import Bar
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -26,7 +25,6 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
-        print("F: ", self.get_object())
         event = self.get_object()
         event.is_active = False
         event.save()
