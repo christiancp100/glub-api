@@ -1,15 +1,14 @@
 from rest_framework import serializers
-from apps.bars.models import Bar
 from django.contrib.auth import get_user_model
 from apps.accounts.serializers import UserSerializer
+from .models import Bar
 
 
 class BarSerializer(serializers.ModelSerializer):
-    owner_id = serializers.CharField(source="owner.id")
 
     class Meta:
         model = Bar
-        fields = ("owner_id", "name", "address", "capacity",)
+        fields = ("name", "address", "capacity", "logo")
         read_only_fields = ("id",)
 
 

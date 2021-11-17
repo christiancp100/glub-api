@@ -14,16 +14,21 @@ class BarManager(models.Manager):
         return False
 
 
+def upload_to(instance, filename):
+    return 'bars/{bar_name}/logo/{filename}'.format(bar_name=instance.name, filename=filename)
+
+
 class Bar(models.Model):
     class Meta:
         unique_together = ('name', 'owner')
 
-    # TODO Add logo and images
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=60, default="Anonymous Bar", blank=False, null=False)
     address = models.CharField(max_length=100, blank=False, null=False)
     capacity = models.IntegerField(default=100, blank=False, null=False)
+    current_capacity = models.IntegerField(default=0, blank=False, null=False)
     is_active = models.BooleanField(default=True)
+    logo = models.ImageField(upload_to=upload_to, blank=True, null=True)
 
     objects = BarManager()
 
