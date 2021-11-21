@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.exceptions import NotAcceptable
-from .models import Bar
+from .models import Bar, BarImages
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework import viewsets, status, generics
-from apps.bars.serializers import BarSerializer
+from apps.bars.serializers import BarSerializer, BarImagesSerializer
 from ..accounts.models import User
 from ..accounts.permissions import IsOwnerOrReadOnly, IsOwner
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -33,8 +33,24 @@ class BarViewSet(viewsets.ModelViewSet):
 
         try:
             bar = Bar.objects.create(owner=owner, **serializer.validated_data)
+
+            try:
+                images = request.FILES['image']
+                # print("longitud:",len(image))
+                for image in images:
+                    data = {
+                        "bar": bar,
+                        "image": image,
+                        "description": "Nada"
+                    }
+                    bar_image = BarImages.objects.create(**data)
+
+            except IntegrityError:
+                raise NotAcceptable("No se han añadido las images del bar")
+
         except IntegrityError:
             raise NotAcceptable("Ya tienes un bar con ese nombre")
+
         return Response(BarSerializer(bar).data, status=status.HTTP_201_CREATED)
 
 

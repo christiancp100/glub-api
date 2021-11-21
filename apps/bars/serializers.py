@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from apps.accounts.serializers import UserSerializer
-from .models import Bar
+from .models import Bar, BarImages
 
 
 class BarSerializer(serializers.ModelSerializer):
@@ -20,3 +20,10 @@ class BarDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id',)
         extra_kwargs = {'owner': {'required': False}}
+
+
+class BarImagesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BarImages
+        fields = ("bar", "image", "description")
