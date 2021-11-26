@@ -40,7 +40,7 @@ def upload_to_bar_images_folder(instance, filename):
     return 'bars/{bar_name}/images/{filename}'.format(bar_name=instance.bar, filename=filename)
 
 
-class BarImages(models.Model):
+class BarImage(models.Model):
     bar = models.ForeignKey(Bar, on_delete=models.CASCADE, blank=True, null=True)
     image = models.ImageField(upload_to=upload_to_bar_images_folder, blank=True, null=True)
     description = models.CharField(max_length=100, blank=False, null=False)
