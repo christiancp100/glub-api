@@ -32,7 +32,7 @@ Then you can execute any python code and import the functions and classes implem
 
 <code>git pull</code>
 
-<code>git checkout features/GLUB-XX</code>
+<code>git checkout feature/GLUB-XX</code>
 
 When you´re done working:
 
