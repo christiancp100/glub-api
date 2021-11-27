@@ -43,4 +43,3 @@ def upload_to_bar_images_folder(instance, filename):
 class BarImage(models.Model):
     bar = models.ForeignKey(Bar, on_delete=models.CASCADE, blank=True, null=True)
     image = models.ImageField(upload_to=upload_to_bar_images_folder, blank=True, null=True)
-    description = models.CharField(max_length=100, blank=False, null=False)

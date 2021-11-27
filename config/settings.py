@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-oz++_#u)2t!q6%35kjw2a)vm4q*g5q!-!77nz-*1h54q0%3=ox
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -219,3 +220,10 @@ CELERY_TIMEZONE = 'UTC'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+# Auth methods
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+AUTH_METHODS = (BasicAuthentication, SessionAuthentication, JWTAuthentication)
