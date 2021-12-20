@@ -1,19 +1,26 @@
 from rest_framework import serializers
 from apps.bars.models import Bar
 from apps.accounts.serializers import UserSerializer
+from .models import Bar, BarImage
+
+
+class BarImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarImage
+        fields = "__all__"
 
 
 class BarSerializer(serializers.ModelSerializer):
-    owner_id = serializers.CharField(source="owner.id")
 
     class Meta:
         model = Bar
-        fields = ("owner_id", "name", "address", "capacity",)
+        fields = ("id", "name", "address", "capacity", "logo")
         read_only_fields = ("id",)
 
 
 class BarDetailSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
+    images = BarImageSerializer(source="barimage_set", many=True, read_only=True)
 
     class Meta:
         model = Bar
