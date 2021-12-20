@@ -4,7 +4,6 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-
 from apps.bars.models import Bar
 from apps.bars.serializers import BarSerializer
 
@@ -44,6 +43,7 @@ BAR_DATA = {
     'capacity': 300
 }
 
+
 class PublicBarTests(TestCase):
 
     def setUp(self):
@@ -61,7 +61,7 @@ class PublicBarTests(TestCase):
         res = self.client.get(BARS_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, serializer.data)
+        self.assertEqual(res.data.get("results"), serializer.data)
 
 
 class PrivateBarTests(TestCase):
@@ -72,7 +72,6 @@ class PrivateBarTests(TestCase):
         self.client.force_authenticate(self.user)
 
     def test_create_bar_with_name_successful(self):
-
         res = self.client.post(BARS_URL, BAR_DATA)
 
         bar = Bar.objects.get(name=BAR_DATA.get('name'))
@@ -80,7 +79,6 @@ class PrivateBarTests(TestCase):
         self.assertEqual(res.data.get('name'), bar.name)
 
     def test_client_cannot_create_bar(self):
-
         self.user.is_owner = False
 
         res = self.client.post(BARS_URL, BAR_DATA)
@@ -102,7 +100,6 @@ class PrivateBarTests(TestCase):
         self.assertEqual(res.data.get('owner').get('id'), owner.id)
 
     def test_admin_cannot_create_bar_when_missing_owner(self):
-
         self.user.is_superuser = True
 
         res = self.client.post(BARS_URL, BAR_DATA)
@@ -110,7 +107,6 @@ class PrivateBarTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_owner_can_update_bar(self):
-
         bar = Bar.objects.create(owner=self.user, **BAR_DATA)
         BAR_DATA.update({'name': 'Aristo Bar'})
         url = BARS_URL + str(bar.id) + "/"
@@ -121,7 +117,6 @@ class PrivateBarTests(TestCase):
         self.assertEqual(updated_bar.name, BAR_DATA.get('name'))
 
     def test_owner_cannot_update_other_owner_bar(self):
-
         another_owner = sample_owner("another_owner", "test_pass")
         bar = Bar.objects.create(owner=another_owner, **BAR_DATA)
         BAR_DATA.update({'name': 'Aristo Bar'})
@@ -144,7 +139,6 @@ class PrivateBarTests(TestCase):
         self.assertEqual(updated_bar.name, BAR_DATA.get('name'))
 
     def test_owner_can_list_their_bars(self):
-
         BAR_DATA2 = {
             'name': 'Anonymous Bar 2',
             'address': '123 Main St',
@@ -158,4 +152,4 @@ class PrivateBarTests(TestCase):
         res = self.client.get(BARS_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, serializer.data)
+        self.assertEqual(res.data.get("results"), serializer.data)
