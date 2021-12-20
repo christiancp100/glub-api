@@ -85,7 +85,7 @@ class PrivateBarTests(TestCase):
         }
         self.user.is_superuser = True
         owner = sample_owner("another@owner.com", "test_pass")
-        BAR_DATA.update({'owner': owner.id})
+        BAR_DATA.update({'ownerId': owner.id})
 
         res = self.client.post(BARS_URL, BAR_DATA)
 
@@ -134,7 +134,16 @@ class PrivateBarTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_admin_can_update_bar(self):
-        pass
+        bar = Bar.objects.create(owner=self.user, **BAR_DATA)
+        admin = sample_admin("admin@glub.com", "test_pass")
+        self.client.force_authenticate(admin)
+        BAR_DATA.update({'name': 'Aristo Bar'})
+        url = BARS_URL + str(bar.id) + "/"
+        res = self.client.put(url, BAR_DATA)
+        updated_bar = Bar.objects.get(id=bar.id)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(updated_bar.name, BAR_DATA.get('name'))
 
     def test_owner_can_list_their_bars(self):
         # TODO

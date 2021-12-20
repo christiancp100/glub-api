@@ -8,7 +8,7 @@ import datetime
 
 
 def sample_owner(email="owner@test.com", password="password_test"):
-    return User.objects.create_owner(email, password)
+    return User.objects.create_owner({'email': email, 'password': password})
 
 
 def sample_bar(owner, name="Test Bar"):
