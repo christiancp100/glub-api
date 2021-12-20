@@ -1,4 +1,5 @@
 from django.db import models
+
 from apps.accounts.models import User
 
 # Create your models here.
@@ -6,7 +7,6 @@ from apps.bars.models import Bar
 
 
 class EventManager(models.Manager):
-
     def get_bar_events(self, bar):
         self.filter(bar=bar)
 

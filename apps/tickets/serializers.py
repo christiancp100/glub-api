@@ -1,6 +1,8 @@
 from rest_framework import serializers
+
 from apps.accounts.serializers import UserSerializer
 from apps.events.serializers import EventSerializer
+
 from .models import Ticket
 
 
@@ -10,4 +12,4 @@ class TicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ('event', 'user', 'is_paid', 'is_ticked')
+        fields = ("event", "user", "is_paid", "is_ticked")

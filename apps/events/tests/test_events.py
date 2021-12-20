@@ -1,14 +1,15 @@
+import datetime
+
 from django.test import TestCase
 from rest_framework.test import APIClient
 
 from apps.accounts.models import User
 from apps.bars.models import Bar
 from apps.events.models import Event
-import datetime
 
 
 def sample_owner(email="owner@test.com", password="password_test"):
-    return User.objects.create_owner({'email': email, 'password': password})
+    return User.objects.create_owner({"email": email, "password": password})
 
 
 def sample_bar(owner, name="Test Bar"):
@@ -19,7 +20,6 @@ EVENTS_URL = "/api/events/"
 
 
 class PrivateEventTest(TestCase):
-
     def setUp(self):
         self.user = sample_owner()
         self.bar = sample_bar(owner=self.user)
@@ -35,7 +35,7 @@ class PrivateEventTest(TestCase):
             "capacity": 200,
             "is_active": True,
             "created_by": self.user.id,
-            "bar": self.bar.id
+            "bar": self.bar.id,
         }
 
         self.client.post(EVENTS_URL, EVENT_DATA)

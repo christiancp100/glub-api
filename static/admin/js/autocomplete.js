@@ -1,4 +1,4 @@
-'use strict';
+"""use strict.""";
 {
     const $ = django.jQuery;
     const init = function($element, options) {

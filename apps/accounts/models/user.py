@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+
 from config import settings
 
 
@@ -14,7 +15,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, **validated_data):
-        profile_data = validated_data.pop('profile')
+        profile_data = validated_data.pop("profile")
         user = self.create(**validated_data)
         UserProfile.objects.create(user=user, **profile_data)
         return user
@@ -34,7 +35,7 @@ class UserManager(BaseUserManager):
 
     def create_partial_user(self, **validated_data):
         email = self.normalize_email(validated_data.pop("email", None))
-        profile_data = validated_data.pop('profile')
+        profile_data = validated_data.pop("profile")
         user = self.model(email=email, **validated_data)
         user.is_completed = True
         user.save(using=self._db)
@@ -56,7 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
 
     def get_full_name(self):
         return self.first_name + " " + self.last_name
@@ -69,7 +70,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
+    )
     phone = models.CharField(max_length=9)
     address = models.CharField(max_length=255, blank=True)
     country = models.CharField(max_length=50, blank=True)
@@ -79,7 +82,7 @@ class UserProfile(models.Model):
 
 
 class ClientProfile(UserProfile):
-    photo = models.ImageField(upload_to='uploads', blank=True, null=True)
+    photo = models.ImageField(upload_to="uploads", blank=True, null=True)
 
 
 class OwnerProfile(UserProfile):

@@ -7,7 +7,7 @@ class UpdateOwn(permissions.BasePermission):
 
 
 class ReadOnly(permissions.BasePermission):
-    """ View level permission to only allow to read and don't modify anything """
+    """View level permission to only allow to read and don't modify anything"""
 
     def has_permission(self, request, view):
         # so we'll always allow GET, HEAD or OPTIONS requests.
@@ -47,7 +47,9 @@ class IsAdmin(permissions.BasePermission):
 
 class IsOwner(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_authenticated and (request.user.is_owner or request.user.is_superuser)
+        return request.user.is_authenticated and (
+            request.user.is_owner or request.user.is_superuser
+        )
 
     def has_object_permission(self, request, view, obj):
         return request.user.is_superuser or request.user == obj.bar.owner

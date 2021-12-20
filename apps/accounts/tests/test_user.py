@@ -17,5 +17,3 @@ class TestUser(TestCase):
 
     def test_user_receives_refresh_token(self):
         pass
-
-

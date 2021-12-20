@@ -1,8 +1,8 @@
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
+
 from apps.accounts.models import User
-from .models import Registry
 
 REGISTRY_URL = "/api/registry/create-user/"
 
@@ -13,18 +13,18 @@ class RegistryTests(TestCase):
 
     def test_create_registry(self):
         USER_DATA = {
-            'firstName': "First",
-            'lastName': "Last Last",
-            'email': "test@client.com",
-            'phone': "650234512",
-            'identityNumber': "11111122A"
+            "firstName": "First",
+            "lastName": "Last Last",
+            "email": "test@client.com",
+            "phone": "650234512",
+            "identityNumber": "11111122A",
         }
         res = self.client.post(REGISTRY_URL, USER_DATA)
-        user = User.objects.get(email=USER_DATA.get('email'))
-        self.assertEqual(user.first_name, USER_DATA.get('firstName'))
-        self.assertEqual(user.last_name, USER_DATA.get('lastName'))
-        self.assertEqual(user.id_number, USER_DATA.get('identity_number'))
-        self.assertEqual(user.id_number, USER_DATA.get('phone'))
+        user = User.objects.get(email=USER_DATA.get("email"))
+        self.assertEqual(user.first_name, USER_DATA.get("firstName"))
+        self.assertEqual(user.last_name, USER_DATA.get("lastName"))
+        self.assertEqual(user.id_number, USER_DATA.get("identity_number"))
+        self.assertEqual(user.id_number, USER_DATA.get("phone"))
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 

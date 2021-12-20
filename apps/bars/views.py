@@ -1,14 +1,16 @@
-from config.settings import AUTH_METHODS
-from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
-from rest_framework.exceptions import NotAcceptable
-from .models import Bar
-from rest_framework import viewsets, status, generics
-from apps.bars.serializers import BarSerializer, BarImageSerializer, BarDetailSerializer
-from ..accounts.models import User
-from ..accounts.permissions import IsOwnerOrReadOnly, IsOwner
-from rest_framework.parsers import MultiPartParser, FormParser
 from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, status, viewsets
+from rest_framework.exceptions import NotAcceptable
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.response import Response
+
+from apps.bars.serializers import BarDetailSerializer, BarImageSerializer, BarSerializer
+from config.settings import AUTH_METHODS
+
+from ..accounts.models import User
+from ..accounts.permissions import IsOwner, IsOwnerOrReadOnly
+from .models import Bar
 
 
 class BarViewSet(viewsets.ModelViewSet):
@@ -24,21 +26,21 @@ class BarViewSet(viewsets.ModelViewSet):
         return BarSerializer
 
     def get_queryset(self):
-        return self.queryset.all().order_by('-name')
+        return self.queryset.all().order_by("-name")
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         if self.request.user.is_superuser:
-            owner = get_object_or_404(User, id=request.data.get('ownerId'))
+            owner = get_object_or_404(User, id=request.data.get("ownerId"))
         else:
             owner = self.request.user
 
         try:
             bar = Bar.objects.create(owner=owner, **serializer.validated_data)
             try:
-                images = request.FILES.getlist('images')
+                images = request.FILES.getlist("images")
                 for image in images:
                     data = {
                         "bar": bar.id,

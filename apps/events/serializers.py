@@ -1,8 +1,9 @@
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from apps.events.models import Event
+
 from apps.bars.serializers import BarSerializer
+from apps.events.models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -19,5 +20,5 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('name', 'description', 'start_date', 'finish_date', 'capacity', 'bar')
-        read_only_fields = ('id',)
+        fields = ("name", "description", "start_date", "finish_date", "capacity", "bar")
+        read_only_fields = ("id",)

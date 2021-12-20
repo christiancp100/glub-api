@@ -1,6 +1,7 @@
 from django.db import models
-from apps.events.models import Event
+
 from apps.accounts.models import User
+from apps.events.models import Event
 
 """
 class TicketType(models.Model):

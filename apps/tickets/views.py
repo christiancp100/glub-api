@@ -1,21 +1,25 @@
+import math
+
+import stripe
 from rest_framework import mixins, status
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import NotAcceptable
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+from stripe.error import StripeError
+
 from .models import Ticket
 from .serializers import TicketSerializer
-import stripe
-import math
-from stripe.error import StripeError
 
 stripe.api_key = "sk_test_8mXwGKRC39YbDsfVnWu6g1lo"
 
 
-class TicketViewSet(mixins.CreateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.ListModelMixin,
-                    GenericViewSet):
+class TicketViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
     permission_classes = (AllowAny,)
@@ -31,14 +35,14 @@ class TicketViewSet(mixins.CreateModelMixin,
         try:
             payment_intent = stripe.PaymentIntent.create(
                 amount=1295,
-                currency='eur',
-                payment_method_types=['card'],
-                application_fee_amount=math.ceil(1295*0.05),
-                stripe_account='acct_1Ju0YsLpaIwDq3NC',
+                currency="eur",
+                payment_method_types=["card"],
+                application_fee_amount=math.ceil(1295 * 0.05),
+                stripe_account="acct_1Ju0YsLpaIwDq3NC",
             )
             response = {
                 "clientSecret": payment_intent.client_secret,
-                "publishableKey": 'pk_test_u3ZcmfHqRT2i7Nn4LwX52y0l'
+                "publishableKey": "pk_test_u3ZcmfHqRT2i7Nn4LwX52y0l",
             }
             print("Send confirmation email...")
 

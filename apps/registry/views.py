@@ -1,28 +1,26 @@
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from rest_framework.mixins import CreateModelMixin
-from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import ViewSet
 
-from apps.accounts.permissions import IsOwner
-from .models import Registry
-from .serializers import RegistrySerializer, CapacitySerializer
-from apps.accounts.serializers import PartialUserSerializer
 from apps.accounts.models import User
+from apps.accounts.permissions import IsOwner
+from apps.accounts.serializers import PartialUserSerializer
 from apps.bars.models import Bar
 from utils.celery.tasks import send_mail_task
+
+from .models import Registry
+from .serializers import CapacitySerializer, RegistrySerializer
 
 
 def get_profile(data):
     try:
         phone = data.pop("phone")
         identity_number = data.pop("identity_number")
-        data["profile"] = {
-            "phone": phone,
-            "identity_number": identity_number
-        }
+        data["profile"] = {"phone": phone, "identity_number": identity_number}
     except:
         raise ValidationError("El número de teléfono o el DNI no están presentes.")
     return data
@@ -59,9 +57,7 @@ class CreatePartialUserView(CreateModelMixin, GenericAPIView):
             "registry/qr_code_email.html",
             "info@glubapp.com",
             [user.email],
-            context={
-                "user_id": user.id
-            }
+            context={"user_id": user.id},
         )
         return Response(status=status.HTTP_200_OK)
 
@@ -107,10 +103,9 @@ class CapacityView(ViewSet):
             bar = Bar.objects.filter(id=serializer.data["bar_id"]).first()
             if bar:
                 bar.decrease_capacity()
-                return Response({
-                    'capacity': bar.capacity,
-                    'current_capacity': bar.current_capacity
-                })
+                return Response(
+                    {"capacity": bar.capacity, "current_capacity": bar.current_capacity}
+                )
             raise ValidationError("Debes especificar el bar_id")
 
     @staticmethod
@@ -120,8 +115,7 @@ class CapacityView(ViewSet):
             bar = Bar.objects.filter(id=request.data.pop("bar_id", None)).first()
             if bar:
                 bar.increase_capacity()
-                return Response({
-                    'capacity': bar.capacity,
-                    'current_capacity': bar.current_capacity
-                })
+                return Response(
+                    {"capacity": bar.capacity, "current_capacity": bar.current_capacity}
+                )
         raise ValidationError("Debes especificar el bar_id")

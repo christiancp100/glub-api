@@ -1,6 +1,7 @@
 from django.test import TestCase
-from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.test import APIClient
+
 from apps.accounts.models.user import User
 from apps.accounts.serializers import UserSerializer
 
@@ -17,8 +18,8 @@ REGULARUSER_DATA = {
         "country": "Spain",
         "city": "Coruña",
         "zip": "15009",
-        "identity_number": "33333333V"
-    }
+        "identity_number": "33333333V",
+    },
 }
 
 
@@ -28,23 +29,23 @@ class ClientTest(TestCase):
 
     def test_user_is_created_when_right_parameters_are_specified(self):
         CLIENT_DATA = {
-            'first_name': "test_client",
-            'last_name': "test_last_name",
-            'email': "test_client@email.com",
-            'password': 'test_pass',
-            'profile': {
-                'identity_number': "12345678A",
-                'phone': "555555555"
-            }
+            "first_name": "test_client",
+            "last_name": "test_last_name",
+            "email": "test_client@email.com",
+            "password": "test_pass",
+            "profile": {"identity_number": "12345678A", "phone": "555555555"},
         }
 
         res = self.client.post(BASE_URL, CLIENT_DATA, format="json")
         created_user = User.objects.get(email=CLIENT_DATA.get("email"))
         self.assertEqual(status.HTTP_201_CREATED, res.status_code)
-        self.assertEqual(created_user.email, CLIENT_DATA.get('email'))
-        self.assertEqual(created_user.first_name, CLIENT_DATA.get('first_name'))
-        self.assertEqual(created_user.last_name, CLIENT_DATA.get('last_name'))
-        self.assertEqual(created_user.profile.identity_number, CLIENT_DATA.get("profile").get("identity_number"))
+        self.assertEqual(created_user.email, CLIENT_DATA.get("email"))
+        self.assertEqual(created_user.first_name, CLIENT_DATA.get("first_name"))
+        self.assertEqual(created_user.last_name, CLIENT_DATA.get("last_name"))
+        self.assertEqual(
+            created_user.profile.identity_number,
+            CLIENT_DATA.get("profile").get("identity_number"),
+        )
 
     def test_user_is_not_created_when_no_parameters_is_specified(self):
         CLIENT_DATA = {
@@ -56,8 +57,8 @@ class ClientTest(TestCase):
                 "country": "",
                 "city": "",
                 "zip": "",
-                "identity_number": ""
-            }
+                "identity_number": "",
+            },
         }
 
         res = self.client.post(BASE_URL, CLIENT_DATA, format="json")
@@ -77,8 +78,8 @@ class ClientTest(TestCase):
                 "country": "Spain",
                 "city": "Coruña",
                 "zip": "15009",
-                "identity_number": "33333333V"
-            }
+                "identity_number": "33333333V",
+            },
         }
 
         res = self.client.post(BASE_URL, CLIENT_DATA, format="json")
@@ -99,8 +100,8 @@ class ClientTest(TestCase):
                 "country": "Spain",
                 "city": "Coruña",
                 "zip": "15009",
-                "identity_number": "33333333V"
-            }
+                "identity_number": "33333333V",
+            },
         }
 
         authenticated_user = User.objects.create_user(**CLIENT_DATA1)

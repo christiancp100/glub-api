@@ -1,18 +1,23 @@
 from django.shortcuts import render
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework import status, viewsets
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.exceptions import PermissionDenied
-from .permissions import UpdateOwn, IsAdmin
-from .serializers import UserSerializer
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from .models import User, UserProfile
+from .permissions import IsAdmin, UpdateOwn
+from .serializers import UserSerializer
 
 
 class UserSerializerViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    authentication_classes = (JWTAuthentication, BasicAuthentication, SessionAuthentication)
+    authentication_classes = (
+        JWTAuthentication,
+        BasicAuthentication,
+        SessionAuthentication,
+    )
     permission_classes = [UpdateOwn | IsAdmin]
 
     def get_serializer_class(self):
@@ -40,9 +45,7 @@ class UserSerializerViewSet(viewsets.ModelViewSet):
         raise PermissionDenied()
 
     def update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
+        kwargs["partial"] = True
         profile_data = request.data.pop("profile")
-        UserProfile.objects \
-            .filter(user_id=self.get_object().id) \
-            .update(**profile_data)
+        UserProfile.objects.filter(user_id=self.get_object().id).update(**profile_data)
         return super().update(request, *args, **kwargs)

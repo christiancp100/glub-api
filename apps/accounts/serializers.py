@@ -1,15 +1,16 @@
-from .models import User
-from rest_framework import serializers
 from django.core.validators import EmailValidator
+from rest_framework import serializers
+
+from .models import User
 from .models.user import UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        read_only_fields = ('id',)
-        optional_fields = '__all__'
-        exclude = ('user',)
+        read_only_fields = ("id",)
+        optional_fields = "__all__"
+        exclude = ("user",)
 
 
 class BaseUserSerializer(serializers.HyperlinkedModelSerializer):
@@ -17,13 +18,25 @@ class BaseUserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        extra_kwargs = {'email': {'validators': [EmailValidator, ]}}
+        extra_kwargs = {
+            "email": {
+                "validators": [
+                    EmailValidator,
+                ]
+            }
+        }
 
 
 class PartialUserSerializer(BaseUserSerializer):
     class Meta(BaseUserSerializer.Meta):
-        fields = ['id', 'email', 'first_name', 'last_name', 'profile']
-        extra_kwargs = {'email': {'validators': [EmailValidator, ]}}
+        fields = ["id", "email", "first_name", "last_name", "profile"]
+        extra_kwargs = {
+            "email": {
+                "validators": [
+                    EmailValidator,
+                ]
+            }
+        }
 
     def save_partial(self, validated_data):
         user = User.objects.create_partial_user(**validated_data)
@@ -40,14 +53,9 @@ class UserSerializer(BaseUserSerializer):
     profile = UserProfileSerializer(required=True)
 
     class Meta(BaseUserSerializer.Meta):
-        fields = ['id', 'email', 'first_name', 'last_name', 'password', 'profile']
+        fields = ["id", "email", "first_name", "last_name", "password", "profile"]
         extra_kwargs = {
-            'password': {
-                'write_only': True,
-                'style': {
-                    'input_type': 'password'
-                }
-            }
+            "password": {"write_only": True, "style": {"input_type": "password"}}
         }
 
     def create(self, validated_data):

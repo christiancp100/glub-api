@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from apps.bars.models import Bar
+
 from apps.accounts.serializers import UserSerializer
+from apps.bars.models import Bar
+
 from .models import Bar, BarImage
 
 
@@ -11,7 +13,6 @@ class BarImageSerializer(serializers.ModelSerializer):
 
 
 class BarSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Bar
         fields = ("id", "name", "address", "capacity", "logo")
@@ -24,6 +25,6 @@ class BarDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bar
-        fields = '__all__'
-        read_only_fields = ('id',)
-        extra_kwargs = {'owner': {'required': False}}
+        fields = "__all__"
+        read_only_fields = ("id",)
+        extra_kwargs = {"owner": {"required": False}}
