@@ -32,6 +32,16 @@ class Bar(models.Model):
 
     objects = BarManager()
 
+    def increase_capacity(self):
+        if self.current_capacity <= self.capacity:
+            self.current_capacity += 1
+            self.save()
+
+    def decrease_capacity(self):
+        if self.current_capacity > 0:
+            self.current_capacity -= 1
+            self.save()
+
     def __str__(self):
         return self.name
 

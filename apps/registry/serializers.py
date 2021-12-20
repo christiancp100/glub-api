@@ -18,4 +18,5 @@ class RegistrySerializer(serializers.ModelSerializer):
 
 
 
-
+class CapacitySerializer(serializers.Serializer):
+    bar_id = serializers.IntegerField(required=True)

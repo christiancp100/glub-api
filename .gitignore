@@ -82,7 +82,7 @@ celerybeat-schedule
 *.sage.py
 
 # dotenv
-.env
+config/.env
 
 # virtualenv
 .venv
@@ -118,3 +118,8 @@ media/
 db/
 
 # Settings
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

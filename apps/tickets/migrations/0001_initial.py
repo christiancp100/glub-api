@@ -11,17 +11,18 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('bars', '0001_initial'),
+        ('events', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Registry',
+            name='Ticket',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_registered', models.DateTimeField(auto_now_add=True)),
-                ('bar', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='bars.bar')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('is_ticked', models.BooleanField(default=False)),
+                ('is_paid', models.BooleanField(default=False)),
+                ('event', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='events.event')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
